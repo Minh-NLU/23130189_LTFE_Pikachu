@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="main-menu" class="screen ">
+  <div class="menu-box">
+    <h1>PIKACHU</h1>
+    <button onclick="">
+      Bắt đầu chơi
+    </button>
+    <button onclick="">
+      Chọn màn
+    </button>
+    <button onclick="">
+      Hướng dẫn
+    </button>
+  </div>
+</div>
+<div id="level-menu" class="screen">
+  <div class="menu-box">
+    <button class="back" onclick="">
+      ←
+    </button>
+    <h1>Chọn màn</h1>
+    <button onclick="">
+      Màn 1
+    </button>
+    <button onclick="">
+      Màn 2
+    </button>
+    <button onclick="">
+      Màn 3
+    </button>
+  </div>
+</div>
+<div class="popup-overlay">
+  <div class="popup-content">
+    <button class="close-button" onclick="">
+      <span class="icon icon-close">x</span>
+    </button>
+    <h2>Hướng dẫn</h2>
+    <p>
+      Chọn 2 Pokemon giống nhau để loại bỏ chúng.
+    </p>
+    <p>
+      Hoàn thành toàn bộ bàn cờ thì sẽ chiến thắng.
+    </p>
+  </div>
+</div>
+<div id="game-screen" class="screen active">
+  <div class="header">
+    <h1>Pikachu</h1>
+    <div>
+      <span>Màn:
+        <b id="level">1</b>
+      </span>
+      <span>
+        Điểm:
+        <b id="score">0</b>
+      </span>
+    </div>
+  </div>
+  <div class="game-board">
+  </div>
+  <div class="menu">
+    <button onclick="">Tạm dừng</button>
+    <button onclick="">Đổi level</button>
+    <button onclick="">Thoát</button>
+  </div>
+</div>
+</body>
+</html>

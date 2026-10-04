@@ -1,0 +1,169 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen{
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen.active{
+    display: flex;
+}
+
+.menu-box{
+    width: 280px;
+    padding: 20px;
+    background: yellow;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+.menu-box h1{
+    font-size: 50px;
+    font-weight: bold;
+    color: #f5b400;
+    margin: 10px;
+}
+.menu-box button{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: #f5c400;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    transition: 0.2s;
+}
+.menu-box button:hover{
+    background: #e0aa00;
+    transform: scale(1.1);
+}
+.popup-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+.popup-overlay.active{
+    display: flex;
+}
+.popup-content{
+    position: relative;
+    width: 450px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadein 2s;
+}
+.popup-content h2{
+    font-size: 50px;
+    margin-bottom: 10px;
+    color: #f5b400;
+}
+.popup-content p{
+    margin: 12px 0;
+    color: #f5b400;
+    font-size: 18px;
+    font-weight: bold;
+}
+.close-button{
+    position: relative;
+    top: 5px;
+    right: -4px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #f5b400;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.close-button:hover{
+    background: #e0aa00;
+    transform: scale(1.1);
+}
+.level-menu{
+    margin-bottom: 20px;
+}
+#game-screen{
+    flex-direction: column;
+    padding: 20px;
+}
+.header{
+    width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.header h1{
+    font-size: 50px;
+    font-weight: bold;
+    color: #f5b400;
+}
+.header span{
+    display: flex;
+    gap: 10px;
+    font-size: 20px;
+    color: #f5b400;
+}
+.game-board{
+    display: grid;
+    grid-template-columns: repeat(16, 40px);
+    grid-template-rows: repeat(9, 40px);
+    gap: 8px;
+    padding: 10px;
+    background: #f5b400;
+    border-radius: 10px;
+    min-width: 500px;
+    min-height: 500px;
+}
+.menu{
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.menu button{
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #f5b400;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    transition: 0.2s;
+}
+.menu button:hover{
+    background: #e0aa00;
+    transform: scale(1.1);
+}
