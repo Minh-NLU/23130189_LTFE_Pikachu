@@ -12,12 +12,9 @@
     <button onclick="switchScreen('level-menu')">
       Bắt đầu chơi
     </button>
-    <button onclick="">
-      Chọn màn
-    </button>
-    <button onclick="">
-      Hướng dẫn
-    </button>
+    <button onclick="togglePopup(true)">
+    Hướng dẫn
+  </button>
   </div>
 </div>
 <div id="level-menu" class="screen">
@@ -39,7 +36,7 @@
 </div>
 <div class="popup-overlay">
   <div class="popup-content">
-    <button class="close-button" onclick="">
+    <button class="close-button" onclick="togglePopup(false)">
       <span class="icon icon-close">x</span>
     </button>
     <h2>Hướng dẫn</h2>

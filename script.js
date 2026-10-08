@@ -24,3 +24,12 @@ function switchScreen(screenId) {
     });
     document.getElementById(screenId).classList.add('active');
 }
+
+function togglePopup(show) {
+    var popup = document.querySelector('.popup-overlay');
+    if (show) {
+        popup.classList.add('active');
+    } else {
+        popup.classList.remove('active');
+    }
+}
