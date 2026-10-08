@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="main-menu" class="screen ">
+<div id="main-menu" class="screen active">
   <div class="menu-box">
     <h1>PIKACHU</h1>
     <button onclick="switchScreen('level-menu')">
@@ -26,7 +26,7 @@
     <button onclick="selectLevel(1)">
       Màn 1
     </button>
-    <button onclick="">
+    <button onclick="selectLevel(2)">
       Màn 2
     </button>
     <button onclick="">
@@ -48,7 +48,7 @@
     </p>
   </div>
 </div>
-<div id="game-screen" class="screen active">
+<div id="game-screen" class="screen ">
   <div class="header">
     <h1>Pikachu</h1>
     <div>
@@ -69,5 +69,6 @@
     <button onclick="">Thoát</button>
   </div>
 </div>
+<script src="script.js"></script>
 </body>
 </html>

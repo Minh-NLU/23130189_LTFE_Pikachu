@@ -144,8 +144,6 @@ body{
     padding: 10px;
     background: #f5b400;
     border-radius: 10px;
-    min-width: 500px;
-    min-height: 500px;
 }
 .title{
     width: 40px;
@@ -160,8 +158,8 @@ body{
     transition: tranform 0.2s;
 }
 .title.selected{
-    outline: 3px solid #e0aa00;
-    background: #f5b400;
+    outline: 3px solid #f5a400;
+    background: #e0aa00;
 }
 .title.empty{
     visibility: hidden;
