@@ -17,8 +17,12 @@ var score = 0;
 var currentLevel = 1;
 var matchedPairs = 0;
 var totalPairs = (rows * cols) / 2;
+var totalTime = 120;
+var timeRemaining = 0;
+var timeInterval;
 
 function switchScreen(screenId) {
+    stopTimer();
     document.querySelectorAll('.screen').forEach(function (s) {
         s.classList.remove('active');
     });
@@ -51,6 +55,7 @@ function startgame() {
 
     initBoard();
     renderBoard();
+    startTimer();
 }
 
 function initBoard() {
@@ -140,6 +145,7 @@ function handleTileClick(elem) {
         matchedPairs++;
         document.getElementById("score").innerText = score;
         if(matchedPairs === totalPairs) {
+            stopTimer();
             setTimeout(function () {
                 alert("Chúc mừng bạn đã chiến thắng");
             }, 200);
@@ -204,4 +210,27 @@ function checkZPath(r1,c1,r,c) {
         }
     }
     return false;
+}
+function startTimer() {
+    clearInterval(timeInterval);
+    timeRemaining = totalTime;
+    updateTimerUI();
+    timeInterval = setInterval(function () {
+        timeRemaining--;
+        updateTimerUI();
+        if(timeRemaining === 0) {
+            stopTimer();
+
+        }
+    },1000);
+}
+function updateTimerUI() {
+    var timer = document.getElementById('time');
+    if(timer) {
+        var percent = (timeRemaining/totalTime) * 100;
+        timer.style.width = percent + "%";
+    }
+}
+function stopTimer() {
+    clearInterval(timeInterval);
 }

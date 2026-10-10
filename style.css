@@ -136,6 +136,21 @@ body{
     font-size: 20px;
     color: #f5b400;
 }
+.time-container{
+    width: 800px;
+    height: 18px;
+    border-radius: 10px;
+    border: 1px solid #f5b400;
+    overflow: hidden;
+    margin: 20px;
+    background: #f5b400;
+}
+.timer{
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+    transition: width 0.3s linear;
+}
 .game-board{
     display: grid;
     grid-template-columns: repeat(16, 40px);
@@ -155,7 +170,7 @@ body{
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    transition: tranform 0.2s;
+    transition: transform 0.2s;
 }
 .title.selected{
     outline: 3px solid #f5a400;
