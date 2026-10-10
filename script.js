@@ -152,6 +152,9 @@ function handleTileClick(elem) {
 }
 function canConnect(r1,c1,r,c) {
     if(checkLinePath(r1,c1,r,c)) return true;
+    if(checkLPath(r1,c1,r,c)) return true;
+    if(checkZPath(r1,c1,r,c)) return true;
+    return false;
 }
 function checkLinePath(r1,c1,r,c) {
     if(r1 !== r && c1 !== c) return false;
@@ -170,6 +173,35 @@ function checkLinePath(r1,c1,r,c) {
             if(board[r1][i] !==0) return false;
         }
         return true;
+    }
+    return false;
+}
+function checkLPath(r1,c1,r,c) {
+    if(board[r1][c] === 0) {
+        if (checkLinePath(r1,c1,r1,c) && checkLinePath(r1,c,r,c)) {
+            return true;
+        }
+    }
+    if(board[r][c1] === 0) {
+        if (checkLinePath(r1,c1,r,c1) && checkLinePath(r,c1,r,c)) {
+            return true;
+        }
+    }
+}
+function checkZPath(r1,c1,r,c) {
+    for(var y = 0; y < MATRIX_cols; y++) {
+        if(board[r1][y] === 0 || y === c) {
+            if (checkLinePath(r1,c1,r1,y) && checkLPath(r1,y,r,c)) {
+                return true;
+            }
+        }
+    }
+    for(var x = 0; x < MATRIX_rows; x++) {
+        if(board[x][c1] === 0 || x === r) {
+            if (checkLinePath(r1,c1,x,c1) && checkLPath(x,c1,r,c)) {
+                return true;
+            }
+        }
     }
     return false;
 }
