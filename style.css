@@ -199,3 +199,20 @@ body{
     background: #e0aa00;
     transform: scale(1.1);
 }
+.result-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: #f5b400;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.result-btn:hover {
+    background: #e0aa00;
+    transform: scale(1.05);
+}

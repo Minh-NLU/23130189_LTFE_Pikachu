@@ -147,7 +147,9 @@ function handleTileClick(elem) {
         if(matchedPairs === totalPairs) {
             stopTimer();
             setTimeout(function () {
-                alert("Chúc mừng bạn đã chiến thắng");
+                showPopupResult("CHIẾN THẮNG",
+                    '<p>Chúc mừng bạn đã giành chiến thắng Màn: ${currentLevel} </p>' +
+                    '<p>Điểm số: ${score}</p>');
             }, 200);
         }
     } else{
@@ -220,7 +222,8 @@ function startTimer() {
         updateTimerUI();
         if(timeRemaining === 0) {
             stopTimer();
-
+            showPopupResult("Hết giờ",
+                '<p>Rất tiếc! Bạn đã hết thời gian để hoàn thành màn chơi. Điểm số: ${score}</p>')
         }
     },1000);
 }
@@ -233,4 +236,16 @@ function updateTimerUI() {
 }
 function stopTimer() {
     clearInterval(timeInterval);
+}
+function showPopupResult(result, message) {
+    document.getElementById('result-title').innerHTML = result;
+    document.getElementById('result-message').innerHTML = message;
+    document.getElementById('result-popup').classList.add('active');
+}
+function closePopupResult() {
+    document.getElementById('result-popup').classList.remove('active');
+}
+function nextLevelResult() {
+    closePopupResult();
+    switchScreen('level-menu')
 }
