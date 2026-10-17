@@ -12,7 +12,6 @@ for (var i = 1; i <= 36; i++) {
 
 var board = [];
 var firstSelected = null;
-var lastSelected = null;
 var score = 0;
 var currentLevel = 1;
 var matchedPairs = 0;
@@ -43,15 +42,14 @@ function togglePopup(show) {
 function selectLevel(level) {
     currentLevel = level;
     document.getElementById('level').innerText = currentLevel;
-    startgame();
+    startGame();
 }
 
-function startgame() {
+function startGame() {
     switchScreen("game-screen");
     score = 0;
     matchedPairs = 0;
     firstSelected = null;
-    lastSelected = null;
     document.getElementById("score").innerText = score;
     document.getElementById("level").innerText = currentLevel;
 
@@ -162,8 +160,9 @@ function handleTileClick(elem) {
                 stopTimer();
                 setTimeout(function () {
                     showPopupResult("CHIẾN THẮNG",
-                        '<p>Chúc mừng bạn đã giành chiến thắng Màn: ${currentLevel} </p>' +
-                        '<p>Điểm số: ${score}</p>');
+                        `<p>Chúc mừng bạn đã giành chiến thắng Màn: ${currentLevel} </p>
+                        <p>Điểm số: ${score}</p>`
+                    );
                 }, 200);
             } else{
                 checkHandleNoMoves();
@@ -261,6 +260,9 @@ function startTimer() {
     clearInterval(timeInterval);
     timeRemaining = totalTime;
     updateTimerUI();
+    runtimer();
+}
+function runtimer(){
     timeInterval = setInterval(function () {
         timeRemaining--;
         updateTimerUI();
@@ -297,7 +299,7 @@ function checkHasAvailablePair(){
     for (var r1 = 1; r1 <= rows; r1++) {
         for (var c1 = 1; c1 <= cols; c1++) {
             if(board[r1][c1] !== 0) {
-                for (var r2 = 1; r2 <= cols; r2++) {
+                for (var r2 = 1; r2 <= rows; r2++) {
                     for (var c2 = 1; c2 <= cols; c2++) {
                         if(r1===r2 && c1===c2) continue;
                         if(board[r2][c2] !==0 && board[r2][c2] === board[r1][c1]){
@@ -356,15 +358,7 @@ function togglePause(){
         isPaused = false;
         boardElement.classList.remove('paused');
         if(pausebtn) pausebtn.innerText = 'Tạm dừng';
-        timeInterval = setInterval(function () {
-            timeRemaining--;
-            updateTimerUI();
-            if(timeRemaining === 0) {
-                stopTimer();
-                showPopupResult("Hết giờ",
-                    '<p>Rất tiếc! Bạn đã hết thời gian để hoàn thành màn chơi. Điểm số: ${score}</p>')
-            }
-        },1000);
+        runtimer();
     }
 }
 function changeLevel(){
