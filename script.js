@@ -20,6 +20,7 @@ var totalPairs = (rows * cols) / 2;
 var totalTime = 120;
 var timeRemaining = 0;
 var timeInterval;
+var isProcessing = false;
 
 function switchScreen(screenId) {
     stopTimer();
@@ -92,7 +93,11 @@ function initBoard() {
 
 function renderBoard() {
     var boardElements = document.querySelector('.game-board');
+    var svgElements = document.getElementById('line-canvas');
     boardElements.innerHTML = '';
+    if(svgElements) {
+        boardElements.appendChild(svgElements);
+    }
     for (var r = 1; r <= rows; r++) {
         for (var c = 1; c <= cols; c++) {
             var tile = document.createElement('tile');
@@ -115,9 +120,10 @@ function renderBoard() {
 }
 
 function handleTileClick(elem) {
-    var r = parseInt(elem.dataset.r);
-    var c = parseInt(elem.dataset.c);
-    if (board[r][c] === 0) {
+    if(isProcessing) return;
+    var r2 = parseInt(elem.dataset.r);
+    var c2 = parseInt(elem.dataset.c);
+    if (board[r2][c2] === 0) {
         return;
     }
     if (firstSelected === null) {
@@ -132,86 +138,118 @@ function handleTileClick(elem) {
     }
     var r1 = parseInt(firstSelected.dataset.r);
     var c1 = parseInt(firstSelected.dataset.c);
-
-    if (board[r1][c1] === board[r][c] && canConnect(r1, c1, r, c)) {
-        board[r1][c1] = 0;
-        board[r][c] = 0;
-        firstSelected.className = 'tile empty';
-        firstSelected.innerHTML = '';
-        elem.className = 'tile empty';
-        elem.innerHTML = '';
-        firstSelected = null;
-        score +=10;
-        matchedPairs++;
-        document.getElementById("score").innerText = score;
-        if(matchedPairs === totalPairs) {
-            stopTimer();
-            setTimeout(function () {
-                showPopupResult("CHIẾN THẮNG",
-                    '<p>Chúc mừng bạn đã giành chiến thắng Màn: ${currentLevel} </p>' +
-                    '<p>Điểm số: ${score}</p>');
-            }, 200);
-        }
+    var path = canConnect(r1, c1, r2, c2);
+    if (board[r1][c1] === board[r2][c2] && path!=null) {
+        isProcessing = true;
+        drawPath(path);
+        setTimeout(function () {
+            clearPath();
+            board[r1][c1] = 0;
+            board[r2][c2] = 0;
+            firstSelected.className = 'tile empty';
+            firstSelected.innerHTML = '';
+            elem.className = 'tile empty';
+            elem.innerHTML = '';
+            firstSelected = null;
+            isProcessing = false;
+            score +=10;
+            matchedPairs++;
+            document.getElementById("score").innerText = score;
+            if(matchedPairs === totalPairs) {
+                stopTimer();
+                setTimeout(function () {
+                    showPopupResult("CHIẾN THẮNG",
+                        '<p>Chúc mừng bạn đã giành chiến thắng Màn: ${currentLevel} </p>' +
+                        '<p>Điểm số: ${score}</p>');
+                }, 200);
+            }}, 200);
     } else{
         firstSelected.classList.remove('selected');
         elem.classList.remove('selected');
         firstSelected = null;
     }
 }
-function canConnect(r1,c1,r,c) {
-    if(checkLinePath(r1,c1,r,c)) return true;
-    if(checkLPath(r1,c1,r,c)) return true;
-    if(checkZPath(r1,c1,r,c)) return true;
-    return false;
+function canConnect(r1,c1,r2,c2) {
+    var path = checkLinePath(r1,c1,r2,c2);
+    if(path!=null) return path;
+    var path = checkLPath(r1,c1,r2,c2);
+    if(path!=null) return path;
+    var path = checkZPath(r1,c1,r2,c2);
+    if(path!=null) return path;
+    return null;
 }
-function checkLinePath(r1,c1,r,c) {
-    if(r1 !== r && c1 !== c) return false;
-    if(c1 === c){
-        minRow = Math.min(r1,r);
-        maxRow = Math.max(r1,r);
+function checkLinePath(r1,c1,r2,c2) {
+    if(r1 !== r2 && c1 !== c2) return null;
+    if(c1 === c2){
+        minRow = Math.min(r1,r2);
+        maxRow = Math.max(r1,r2);
         for (var i = minRow + 1; i< maxRow; i++) {
-            if(board[i][c1] !==0) return false;
+            if(board[i][c1] !==0) return null;
         }
-        return true;
+        return [{r:r1, c:c1},{r:r2, c:c2}];
     }
-    if(r1 === r){
-        minCol = Math.min(c1,c);
-        maxCol = Math.max(c1,c);
+    if(r1 === r2){
+        minCol = Math.min(c1,c2);
+        maxCol = Math.max(c1,c2);
         for (var i = minCol + 1; i< maxCol; i++) {
-            if(board[r1][i] !==0) return false;
+            if(board[r1][i] !==0) return null;
         }
-        return true;
+        return [{r:r1, c:c1},{r:r2, c:c2}];
     }
-    return false;
+    return null;
 }
-function checkLPath(r1,c1,r,c) {
-    if(board[r1][c] === 0) {
-        if (checkLinePath(r1,c1,r1,c) && checkLinePath(r1,c,r,c)) {
-            return true;
+function checkLPath(r1,c1,r2,c2) {
+    if(board[r1][c2] === 0) {
+        if (checkLinePath(r1,c1,r1,c2) && checkLinePath(r1,c2,r2,c2)) {
+            return [{r:r1, c:c1},{r:r1, c:c2},{r:r2, c:c2}];
         }
     }
-    if(board[r][c1] === 0) {
-        if (checkLinePath(r1,c1,r,c1) && checkLinePath(r,c1,r,c)) {
-            return true;
+    if(board[r2][c1] === 0) {
+        if (checkLinePath(r1,c1,r2,c1) && checkLinePath(r2,c1,r2,c2)) {
+            return [{r:r1, c:c1},{r:r2, c:c1},{r:r2, c:c2}];
         }
     }
+    return null;
 }
-function checkZPath(r1,c1,r,c) {
+function checkZPath(r1,c1,r2,c2) {
     for(var y = 0; y < MATRIX_cols; y++) {
-        if(board[r1][y] === 0 || y === c) {
-            if (checkLinePath(r1,c1,r1,y) && checkLPath(r1,y,r,c)) {
-                return true;
+        if(board[r1][y] === 0 || y === c2) {
+            if (checkLinePath(r1,c1,r1,y) && checkLPath(r1,y,r2,c2)) {
+                var lPath = checkLPath(r1,y,r2,c2);
+                return [{r:r1, c:c1}].concat(lPath);
             }
         }
     }
     for(var x = 0; x < MATRIX_rows; x++) {
-        if(board[x][c1] === 0 || x === r) {
-            if (checkLinePath(r1,c1,x,c1) && checkLPath(x,c1,r,c)) {
-                return true;
+        if(board[x][c1] === 0 || x === r2) {
+            if (checkLinePath(r1,c1,x,c1) && checkLPath(x,c1,r2,c2)) {
+                var lPath = checkLPath(x,c1,r2,c2);
+                return [{r:r1, c:c1}].concat(lPath);
             }
         }
     }
-    return false;
+    return null;
+}
+function drawPath(path) {
+    var svg =document.getElementById('line-canvas');
+    if(!svg) return;
+    var tileSize = 40;
+    var gap = 8;
+    var padding = 20;
+    var points ="";
+    for (var i = 0; i < path.length; i++) {
+        var cell = path[i];
+        var x = padding + (cell.c - 1) * (tileSize + gap) + tileSize / 2;
+        var y = padding + (cell.r - 1) * (tileSize + gap) + tileSize / 2;
+        points += x + "," + y + " ";
+    }
+    svg.innerHTML = '<polyline class="polyline-path" points="'+points.trim()+'"/>';
+}
+function clearPath() {
+    var svg = document.getElementById('line-canvas');
+    if(svg){
+        svg.innerHTML='';
+    }
 }
 function startTimer() {
     clearInterval(timeInterval);

@@ -152,11 +152,12 @@ body{
     transition: width 0.3s linear;
 }
 .game-board{
+    position: relative;
     display: grid;
     grid-template-columns: repeat(16, 40px);
     grid-template-rows: repeat(9, 40px);
     gap: 8px;
-    padding: 10px;
+    padding: 20px;
     background: #f5b400;
     border-radius: 10px;
 }
@@ -178,6 +179,23 @@ body{
 }
 .title.empty{
     visibility: hidden;
+}
+#line-canvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+}
+.polyline-path{
+    fill: none;
+    stroke: red;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 .menu{
     display: flex;
