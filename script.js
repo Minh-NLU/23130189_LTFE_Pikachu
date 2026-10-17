@@ -54,7 +54,9 @@ function startgame() {
     document.getElementById("score").innerText = score;
     document.getElementById("level").innerText = currentLevel;
 
+    clearPath();
     initBoard();
+    checkHandleNoMoves();
     renderBoard();
     startTimer();
 }
@@ -162,7 +164,10 @@ function handleTileClick(elem) {
                         '<p>Chúc mừng bạn đã giành chiến thắng Màn: ${currentLevel} </p>' +
                         '<p>Điểm số: ${score}</p>');
                 }, 200);
-            }}, 200);
+            } else{
+                checkHandleNoMoves();
+            }
+            }, 200);
     } else{
         firstSelected.classList.remove('selected');
         elem.classList.remove('selected');
@@ -286,4 +291,55 @@ function closePopupResult() {
 function nextLevelResult() {
     closePopupResult();
     switchScreen('level-menu')
+}
+function checkHasAvailablePair(){
+    for (var r1 = 1; r1 <= rows; r1++) {
+        for (var c1 = 1; c1 <= cols; c1++) {
+            if(board[r1][c1] !== 0) {
+                for (var r2 = 1; r2 <= cols; r2++) {
+                    for (var c2 = 1; c2 <= cols; c2++) {
+                        if(r1===r2 && c1===c2) continue;
+                        if(board[r2][c2] !==0 && board[r2][c2] === board[r1][c1]){
+                            if(canConnect(r1,c1,r2,c2) !== null){
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    return false;
+}
+function shuffleBoard(){
+    var remainCards =[];
+    for(var r1 = 0; r1 <= rows; r1++){
+        for(var c1 = 0; c1 <= cols; c1++) {
+            if(board[r1][c1] !== 0) {
+                remainCards.push(board[r1][c1]);
+            }
+        }
+    }
+    for(var i = 0; i < remainCards.length; i++) {
+        var randomCard = Math.floor(Math.random()*remainCards.length);
+        var temp = remainCards[i];
+        remainCards[i] = remainCards[randomCard];
+        remainCards[randomCard] = temp;
+    }
+    var index = 0;
+    for(var r1 = 0; r1 <= rows; r1++) {
+        for(var c1 = 0; c1 <= cols; c1++) {
+            if(board[r1][c1] !== 0) {
+                board[r1][c1] = remainCards[index];
+                index++;
+            }
+        }
+    }
+    renderBoard();
+}
+function checkHandleNoMoves(){
+    while(!checkHasAvailablePair()){
+        shuffleBoard();
+    }
 }
