@@ -161,6 +161,11 @@ body{
     background: #f5b400;
     border-radius: 10px;
 }
+.game-board.paused{
+    filter: brightness(50%);
+    pointer-events: none;
+    user-select: none;
+}
 .title{
     width: 40px;
     height: 40px;

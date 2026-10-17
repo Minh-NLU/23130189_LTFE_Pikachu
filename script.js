@@ -21,6 +21,7 @@ var totalTime = 120;
 var timeRemaining = 0;
 var timeInterval;
 var isProcessing = false;
+var isPaused = false;
 
 function switchScreen(screenId) {
     stopTimer();
@@ -342,4 +343,44 @@ function checkHandleNoMoves(){
     while(!checkHasAvailablePair()){
         shuffleBoard();
     }
+}
+function togglePause(){
+    var pausebtn = document.getElementById('pause-btn');
+    var boardElement = document.querySelector('.game-board');
+    if(!isPaused){
+        isPaused = true;
+        clearInterval(timeInterval);
+        boardElement.classList.add('paused');
+        if(pausebtn) pausebtn.innerText = 'tiếp tục';
+    } else{
+        isPaused = false;
+        boardElement.classList.remove('paused');
+        if(pausebtn) pausebtn.innerText = 'Tạm dừng';
+        timeInterval = setInterval(function () {
+            timeRemaining--;
+            updateTimerUI();
+            if(timeRemaining === 0) {
+                stopTimer();
+                showPopupResult("Hết giờ",
+                    '<p>Rất tiếc! Bạn đã hết thời gian để hoàn thành màn chơi. Điểm số: ${score}</p>')
+            }
+        },1000);
+    }
+}
+function changeLevel(){
+    stopTimer();
+    resetPauseState();
+    switchScreen('level-menu');
+}
+function exit(){
+    stopTimer();
+    resetPauseState();
+    switchScreen('main-menu');
+}
+function resetPauseState(){
+    isPaused = false;
+    var boardElement = document.querySelector('.game-board');
+    if(boardElement) boardElement.classList.remove('paused');
+    var pausebtn = document.getElementById('pause-btn');
+    if(pausebtn) pausebtn.innerText = 'Tạm dừng'
 }
