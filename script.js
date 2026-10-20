@@ -155,10 +155,10 @@ function handleTileClick(elem) {
             elem.innerHTML = '';
             firstSelected = null;
             isProcessing = false;
+            matchedPairs++;
             applyLevelSlide();
             renderBoard();
             score +=10;
-            matchedPairs++;
             document.getElementById("score").innerText = score;
             if(matchedPairs === totalPairs) {
                 stopTimer();
@@ -401,6 +401,24 @@ function applyLevelSlide(){
         }
     }
     else if(currentLevel === 3){
-
+        for (var r1 = 1; r1 <= rows; r1++) {
+            var temp = [];
+            for(var c1 = 1; c1 <= cols; c1++) {
+                if(board[r1][c1] !== 0) {
+                    temp.push(board[r1][c1]);
+                }
+            }
+            for(var c2 = 1; c2 <= temp.length; c2++) {
+                board[r1][c2] = temp[c2-1];
+            }
+            for(var c3 = temp.length + 1; c3 <= cols; c3++) {
+                board[r1][c3] = 0;
+            }
+        }
+    }
+    else if(currentLevel === 4){
+        if(matchedPairs % 3 === 0){
+            shuffleBoard();
+        }
     }
 }
