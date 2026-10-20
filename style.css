@@ -167,7 +167,7 @@ body{
     user-select: none;
 }
 .tile{
-    width: 40px;
+    width: 35px;
     height: 40px;
     background: #f5b400;
     border-radius: 6px;
@@ -179,7 +179,7 @@ body{
     transition: transform 0.2s;
 }
 .tile.selected{
-    outline: 3px solid #f5a400;
+    outline: 3px solid #ae7400;
     background: #e0aa00;
 }
 .tile.empty{

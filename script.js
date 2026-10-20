@@ -155,6 +155,8 @@ function handleTileClick(elem) {
             elem.innerHTML = '';
             firstSelected = null;
             isProcessing = false;
+            applyLevelSlide();
+            renderBoard();
             score +=10;
             matchedPairs++;
             document.getElementById("score").innerText = score;
@@ -298,11 +300,11 @@ function nextLevelResult() {
     switchScreen('level-menu')
 }
 function checkHasAvailablePair(){
-    for (var r1 = 0; r1 < rows; r1++) {
-        for (var c1 = 0; c1 < cols; c1++) {
+    for (var r1 = 1; r1 <= rows; r1++) {
+        for (var c1 = 1; c1 <= cols; c1++) {
             if(board[r1][c1] !== 0) {
-                for (var r2 = 0; r2 < rows; r2++) {
-                    for (var c2 = 0; c2 < cols; c2++) {
+                for (var r2 = 1; r2 <= rows; r2++) {
+                    for (var c2 = 1; c2 <= cols; c2++) {
                         if(r1===r2 && c1===c2) continue;
                         if(board[r2][c2] !==0 && board[r2][c2] === board[r1][c1]){
                             if(canConnect(r1,c1,r2,c2) !== null){
@@ -319,8 +321,8 @@ function checkHasAvailablePair(){
 }
 function shuffleBoard(){
     var remainCards =[];
-    for(var r1 = 0; r1 < rows; r1++){
-        for(var c1 = 0; c1 < cols; c1++) {
+    for(var r1 = 1; r1 <= rows; r1++){
+        for(var c1 = 1; c1 <= cols; c1++) {
             if(board[r1][c1] !== 0) {
                 remainCards.push(board[r1][c1]);
             }
@@ -333,8 +335,8 @@ function shuffleBoard(){
         remainCards[randomCard] = temp;
     }
     var index = 0;
-    for(var r1 = 0; r1 < rows; r1++) {
-        for(var c1 = 0; c1 < cols; c1++) {
+    for(var r1 = 1; r1 <= rows; r1++) {
+        for(var c1 = 1; c1 <= cols; c1++) {
             if(board[r1][c1] !== 0) {
                 board[r1][c1] = remainCards[index];
                 index++;
@@ -379,4 +381,26 @@ function resetPauseState(){
     if(boardElement) boardElement.classList.remove('paused');
     var pausebtn = document.getElementById('pause-btn');
     if(pausebtn) pausebtn.innerText = 'Tạm dừng'
+}
+function applyLevelSlide(){
+    if(currentLevel === 2){
+        for (var c1 = 1; c1 <= cols; c1++) {
+            var temp = [];
+            for(var r1 = 1; r1 <= rows; r1++) {
+                if(board[r1][c1] !== 0) {
+                    temp.push(board[r1][c1]);
+                }
+            }
+            var emptyCount = rows - temp.length;
+            for(var r2 = 1; r2 <= emptyCount; r2++) {
+                board[r2][c1] = 0;
+            }
+            for(var r3 = emptyCount + 1; r3 <= rows; r3++) {
+                board[r3][c1] = temp[r3-emptyCount-1];
+            }
+        }
+    }
+    else if(currentLevel === 3){
+
+    }
 }
