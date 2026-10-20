@@ -185,6 +185,12 @@ body{
 .tile.empty{
     visibility: hidden;
 }
+.tile img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
 #line-canvas{
     position: absolute;
     top: 0;

@@ -5,9 +5,9 @@ var MATRIX_rows = rows + 2;
 var MATRIX_cols = cols + 2;
 
 var pokemon = [];
-for (var i = 1; i <= 36; i++) {
-    // pokemon[i] = `images/${i}.png`;
-    pokemon[i] = i;
+for (var i = 1; i <= 24; i++) {
+    pokemon[i] = `images/pieces${i}.png`;
+    // pokemon[i] = i;
 }
 
 var board = [];
@@ -16,7 +16,7 @@ var score = 0;
 var currentLevel = 1;
 var matchedPairs = 0;
 var totalPairs = (rows * cols) / 2;
-var totalTime = 120;
+var totalTime = 480;
 var timeRemaining = 0;
 var timeInterval;
 var isProcessing = false;
@@ -67,6 +67,8 @@ function initBoard() {
         cards.push(pokemon[i]);
         cards.push(pokemon[i]);
         cards.push(pokemon[i]);
+        cards.push(pokemon[i]);
+        cards.push(pokemon[i]);
     }
 
     for (var i = 0; i < cards.length; i++) {
@@ -107,10 +109,10 @@ function renderBoard() {
 
             var value = board[r][c];
             if (value === 0) {
-                tile.className = 'title empty';
+                tile.className = 'tile empty';
             } else {
-                tile.className = 'title';
-                tile.innerHTML = value;
+                tile.className = 'tile';
+                tile.innerHTML = `<img src="`+value+`" alt="pokemon">`;
                 tile.onclick = function () {
                     handleTileClick(this);
                 }
@@ -269,7 +271,7 @@ function runtimer(){
         if(timeRemaining === 0) {
             stopTimer();
             showPopupResult("Hết giờ",
-                '<p>Rất tiếc! Bạn đã hết thời gian để hoàn thành màn chơi. Điểm số: ${score}</p>')
+                `<p>Rất tiếc! Bạn đã hết thời gian để hoàn thành màn chơi. Điểm số: ${score}</p>`)
         }
     },1000);
 }
@@ -296,11 +298,11 @@ function nextLevelResult() {
     switchScreen('level-menu')
 }
 function checkHasAvailablePair(){
-    for (var r1 = 1; r1 <= rows; r1++) {
-        for (var c1 = 1; c1 <= cols; c1++) {
+    for (var r1 = 0; r1 < rows; r1++) {
+        for (var c1 = 0; c1 < cols; c1++) {
             if(board[r1][c1] !== 0) {
-                for (var r2 = 1; r2 <= rows; r2++) {
-                    for (var c2 = 1; c2 <= cols; c2++) {
+                for (var r2 = 0; r2 < rows; r2++) {
+                    for (var c2 = 0; c2 < cols; c2++) {
                         if(r1===r2 && c1===c2) continue;
                         if(board[r2][c2] !==0 && board[r2][c2] === board[r1][c1]){
                             if(canConnect(r1,c1,r2,c2) !== null){
@@ -317,8 +319,8 @@ function checkHasAvailablePair(){
 }
 function shuffleBoard(){
     var remainCards =[];
-    for(var r1 = 0; r1 <= rows; r1++){
-        for(var c1 = 0; c1 <= cols; c1++) {
+    for(var r1 = 0; r1 < rows; r1++){
+        for(var c1 = 0; c1 < cols; c1++) {
             if(board[r1][c1] !== 0) {
                 remainCards.push(board[r1][c1]);
             }
@@ -331,8 +333,8 @@ function shuffleBoard(){
         remainCards[randomCard] = temp;
     }
     var index = 0;
-    for(var r1 = 0; r1 <= rows; r1++) {
-        for(var c1 = 0; c1 <= cols; c1++) {
+    for(var r1 = 0; r1 < rows; r1++) {
+        for(var c1 = 0; c1 < cols; c1++) {
             if(board[r1][c1] !== 0) {
                 board[r1][c1] = remainCards[index];
                 index++;
