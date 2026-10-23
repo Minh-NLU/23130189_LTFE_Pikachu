@@ -15,7 +15,7 @@ var firstSelected = null;
 var score = 0;
 var currentLevel = 1;
 var matchedPairs = 0;
-var totalPairs = (rows * cols) / 2;
+var totalPairs = 0;
 var totalTime = 480;
 var timeRemaining = 0;
 var timeInterval;
@@ -71,36 +71,84 @@ function startGame() {
 }
 
 function initBoard() {
-    var cards = [];
-    for (var i = 1; i < pokemon.length; i++) {
-        cards.push(pokemon[i]);
-        cards.push(pokemon[i]);
-        cards.push(pokemon[i]);
-        cards.push(pokemon[i]);
-        cards.push(pokemon[i]);
-        cards.push(pokemon[i]);
-    }
-
-    for (var i = 0; i < cards.length; i++) {
-        var randomCard = Math.floor(Math.random() * cards.length);
-        var temp = cards[i];
-        cards[i] = cards[randomCard];
-        cards[randomCard] = temp;
-    }
-    board = [];
-    var cardIndex = 0;
-
-    for (var r = 0; r < MATRIX_rows; r++) {
-        var row = [];
-        for (var c = 0; c < MATRIX_cols; c++) {
-            if (r === 0 || r === MATRIX_rows - 1 || c === MATRIX_cols - 1 || c === 0) {
+    if(currentLevel === 6) {
+        var numObstacle = 12;
+        var totalTile = (rows * cols) - numObstacle;
+        totalPairs = totalTile / 2;
+        var cards = [];
+        for (var i = 1; i < pokemon.length-2; i++) {
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+        }
+        for (var j = 0; j < cards.length; j++) {
+            var randomCard = Math.floor(Math.random() * cards.length);
+            var temp = cards[j];
+            cards[j] = cards[randomCard];
+            cards[randomCard] = temp;
+        }
+        board = [];
+        for (var r = 0; r < MATRIX_rows; r++) {
+            var row = [];
+            for (var c = 0; c < MATRIX_cols; c++) {
                 row.push(0);
-            } else {
-                row.push(cards[cardIndex]);
-                cardIndex++;
+            }
+            board.push(row);
+        }
+        var obstacles = 0;
+        while (obstacles < numObstacle) {
+            var ranR = Math.floor(Math.random() * rows) + 1;
+            var ranC = Math.floor(Math.random() * cols) + 1;
+            if(board[ranR][ranC]===0){
+                board[ranR][ranC] = -1;
+                obstacles++;
             }
         }
-        board.push(row);
+        var cardIndex =0;
+        for (var r = 1; r <= rows; r++) {
+            for (var c = 1; c <= cols; c++) {
+                if (board[r][c] !== -1) {
+                    board[r][c] = cards[cardIndex];
+                    cardIndex++;
+                }
+            }
+        }
+    } else{
+        totalPairs = (rows * cols) / 2;
+        var cards = [];
+        for (var i = 1; i < pokemon.length; i++) {
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+            cards.push(pokemon[i]);
+        }
+
+        for (var i = 0; i < cards.length; i++) {
+            var randomCard = Math.floor(Math.random() * cards.length);
+            var temp = cards[i];
+            cards[i] = cards[randomCard];
+            cards[randomCard] = temp;
+        }
+        board = [];
+        var cardIndex = 0;
+
+        for (var r = 0; r < MATRIX_rows; r++) {
+            var row = [];
+            for (var c = 0; c < MATRIX_cols; c++) {
+                if (r === 0 || r === MATRIX_rows - 1 || c === MATRIX_cols - 1 || c === 0) {
+                    row.push(0);
+                } else {
+                    row.push(cards[cardIndex]);
+                    cardIndex++;
+                }
+            }
+            board.push(row);
+        }
     }
 }
 
@@ -120,6 +168,8 @@ function renderBoard() {
             var value = board[r][c];
             if (value === 0) {
                 tile.className = 'tile empty';
+            } else if(value === -1) {
+                tile.className = 'tile obstacle';
             } else {
                 if(currentLevel === 5 && !isMemory){
                     tile.className = 'tile covered';
@@ -140,7 +190,7 @@ function handleTileClick(elem) {
     if(isProcessing) return;
     var r2 = parseInt(elem.dataset.r);
     var c2 = parseInt(elem.dataset.c);
-    if (board[r2][c2] === 0) {
+    if (board[r2][c2] === 0||board[r2][c2] === -1) {
         return;
     }
     elem.classList.remove('covered');
@@ -327,7 +377,7 @@ function nextLevelResult() {
 function checkHasAvailablePair(){
     for (var r1 = 1; r1 <= rows; r1++) {
         for (var c1 = 1; c1 <= cols; c1++) {
-            if(board[r1][c1] !== 0) {
+            if(board[r1][c1] !== 0 && board[r1][c1] !== -1) {
                 for (var r2 = 1; r2 <= rows; r2++) {
                     for (var c2 = 1; c2 <= cols; c2++) {
                         if(r1===r2 && c1===c2) continue;
@@ -348,7 +398,7 @@ function shuffleBoard(){
     var remainCards =[];
     for(var r1 = 1; r1 <= rows; r1++){
         for(var c1 = 1; c1 <= cols; c1++) {
-            if(board[r1][c1] !== 0) {
+            if(board[r1][c1] !== 0 && board[r1][c1] !== -1) {
                 remainCards.push(board[r1][c1]);
             }
         }

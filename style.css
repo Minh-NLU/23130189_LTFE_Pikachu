@@ -117,6 +117,7 @@ body{
 #game-screen{
     flex-direction: column;
     padding: 20px;
+    background: linear-gradient(to top, #ff8c00, #ffcc00, #fffa75);
 }
 .header{
     width: 600px;
@@ -158,7 +159,7 @@ body{
     grid-template-rows: repeat(9, 40px);
     gap: 8px;
     padding: 20px;
-    background: #f5b400;
+    /*background: #f5b400;*/
     border-radius: 10px;
 }
 .game-board.paused{
@@ -179,7 +180,7 @@ body{
     transition: transform 0.2s;
 }
 .tile.selected{
-    outline: 3px solid #ae7400;
+    outline: 5px solid #ae7400;
     background: #e0aa00;
 }
 .tile.empty{
@@ -199,6 +200,11 @@ body{
 .tile.covered img{
     opacity: 0;
     pointer-events: none;
+}
+.tile.obstacle{
+    background-color: #555555;
+    border: 5px solid #333333;
+    cursor: not-allowed;
 }
 #line-canvas{
     position: absolute;
