@@ -191,6 +191,15 @@ body{
     object-fit: contain;
     pointer-events: none;
 }
+.tile.covered{
+    background-color: #2c3e50;
+    border: 5px solid #34495e;
+    cursor: pointer;
+}
+.tile.covered img{
+    opacity: 0;
+    pointer-events: none;
+}
 #line-canvas{
     position: absolute;
     top: 0;

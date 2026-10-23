@@ -21,6 +21,7 @@ var timeRemaining = 0;
 var timeInterval;
 var isProcessing = false;
 var isPaused = false;
+var isMemory = false;
 
 function switchScreen(screenId) {
     stopTimer();
@@ -56,7 +57,16 @@ function startGame() {
     clearPath();
     initBoard();
     checkHandleNoMoves();
-    renderBoard();
+    if(currentLevel === 5) {
+        isMemory = true;
+        renderBoard();
+        setTimeout(function () {
+            isMemory = false;
+            renderBoard();
+        },3000);
+    } else{
+        renderBoard();
+    }
     startTimer();
 }
 
@@ -111,7 +121,11 @@ function renderBoard() {
             if (value === 0) {
                 tile.className = 'tile empty';
             } else {
-                tile.className = 'tile';
+                if(currentLevel === 5 && !isMemory){
+                    tile.className = 'tile covered';
+                } else{
+                    tile.className = 'tile';
+                }
                 tile.innerHTML = `<img src="`+value+`" alt="pokemon">`;
                 tile.onclick = function () {
                     handleTileClick(this);
@@ -129,6 +143,7 @@ function handleTileClick(elem) {
     if (board[r2][c2] === 0) {
         return;
     }
+    elem.classList.remove('covered');
     if (firstSelected === null) {
         firstSelected = elem;
         elem.classList.add('selected');
@@ -137,6 +152,9 @@ function handleTileClick(elem) {
     if (firstSelected === elem) {
         firstSelected = null;
         elem.classList.remove('selected');
+        if(currentLevel === 5) {
+            elem.classList.add('covered');
+        }
         return;
     }
     var r1 = parseInt(firstSelected.dataset.r);
@@ -175,7 +193,14 @@ function handleTileClick(elem) {
     } else{
         firstSelected.classList.remove('selected');
         elem.classList.remove('selected');
+        var temp = firstSelected;
         firstSelected = null;
+        setTimeout(function () {
+            if(currentLevel === 5) {
+                temp.classList.add('covered');
+                elem.classList.add('covered');
+            }
+        },500);
     }
 }
 function canConnect(r1,c1,r2,c2) {
@@ -421,4 +446,5 @@ function applyLevelSlide(){
             shuffleBoard();
         }
     }
+    else if(currentLevel === 6){}
 }
