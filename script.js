@@ -86,6 +86,7 @@ function startGame() {
     switchScreen("game-screen");
     score = 0;
     matchedPairs = 0;
+    hint = 3;
     firstSelected = null;
     document.getElementById("score").innerText = score;
     document.getElementById("level").innerText = currentLevel;

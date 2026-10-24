@@ -2,8 +2,286 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Pikachu</title>
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body{
+        font-family: Arial, Helvetica, sans-serif;
+        min-height: 100vh;
+
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .screen{
+        display: none;
+        width: 100%;
+        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .screen.active{
+        display: flex;
+      }
+
+      .menu-box{
+        width: 280px;
+        padding: 20px;
+        background: yellow;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+      .menu-box h1{
+        font-size: 50px;
+        font-weight: bold;
+        color: #f5b400;
+        margin: 10px;
+      }
+      .menu-box button{
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 10px;
+        background: #f5c400;
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        border: none;
+        transition: 0.2s;
+      }
+      .menu-box button:hover{
+        background: #e0aa00;
+        transform: scale(1.1);
+      }
+      .popup-overlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        display: none;
+      }
+      .popup-overlay.active{
+        display: flex;
+      }
+      .popup-content{
+        position: relative;
+        width: 450px;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        animation: fadein 2s;
+      }
+      .popup-content h2{
+        font-size: 50px;
+        margin-bottom: 10px;
+        color: #f5b400;
+      }
+      .popup-content p{
+        margin: 12px 0;
+        color: #f5b400;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .close-button{
+        position: relative;
+        top: 5px;
+        right: -4px;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #f5b400;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .close-button:hover{
+        background: #e0aa00;
+        transform: scale(1.1);
+      }
+      .confirm-button{
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: #f5b400;
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        border: none;
+        transition: 0.2s;
+      }
+      .confirm-button:hover{
+        background: #e0aa00;
+        transform: scale(1.1);
+      }
+      .level-menu{
+        margin-bottom: 20px;
+      }
+      #game-screen{
+        flex-direction: column;
+        padding: 20px;
+        background: linear-gradient(to top, #ff8c00, #ffcc00, #fffa75);
+      }
+      .header{
+        width: 600px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .header h1{
+        font-size: 50px;
+        font-weight: bold;
+        color: #f5b400;
+      }
+      .header span{
+        display: flex;
+        gap: 10px;
+        font-size: 20px;
+        color: #f5b400;
+      }
+      .time-container{
+        width: 800px;
+        height: 18px;
+        border-radius: 10px;
+        border: 1px solid #f5b400;
+        overflow: hidden;
+        margin: 20px;
+        background: #f5b400;
+      }
+      .timer{
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #ff4b2b, #ff416c);
+        transition: width 0.3s linear;
+      }
+      .game-board{
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(16, 40px);
+        grid-template-rows: repeat(9, 40px);
+        gap: 8px;
+        padding: 20px;
+        /*background: #f5b400;*/
+        border-radius: 10px;
+      }
+      .game-board.paused{
+        filter: brightness(50%);
+        pointer-events: none;
+        user-select: none;
+      }
+      .tile{
+        width: 35px;
+        height: 40px;
+        background: #f5b400;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+      }
+      .tile.selected{
+        outline: 5px solid #ae7400;
+        background: #e0aa00;
+      }
+      .tile.empty{
+        visibility: hidden;
+      }
+      .tile img{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+      .tile.covered{
+        background-color: #2c3e50;
+        border: 5px solid #34495e;
+        cursor: pointer;
+      }
+      .tile.covered img{
+        opacity: 0;
+        pointer-events: none;
+      }
+      .tile.obstacle{
+        background-color: #555555;
+        border: 5px solid #333333;
+        cursor: not-allowed;
+      }
+      #line-canvas{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+        overflow: visible;
+      }
+      .polyline-path{
+        fill: none;
+        stroke: red;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .menu{
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .menu button{
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: #f5b400;
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        border: none;
+        transition: 0.2s;
+      }
+      .menu button:hover{
+        background: #e0aa00;
+        transform: scale(1.1);
+      }
+      .result-btn {
+        margin-top: 15px;
+        padding: 10px 25px;
+        background: #f5b400;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .result-btn:hover {
+        background: #e0aa00;
+        transform: scale(1.05);
+      }
+    </style>
 </head>
 <body>
 <div id="main-menu" class="screen active">
