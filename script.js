@@ -49,6 +49,7 @@ var timeInterval;
 var isProcessing = false;
 var isPaused = false;
 var isMemory = false;
+var hint = 3;
 
 function switchScreen(screenId) {
     stopTimer();
@@ -529,6 +530,36 @@ function applyLevelSlide(){
     else if(currentLevel === 4){
         if(matchedPairs % 3 === 0){
             shuffleBoard();
+        }
+    }
+}
+function toggleHint(){
+    if(isProcessing||isPaused||hint<=0) return;
+    for (var r1 = 1; r1 <= rows; r1++) {
+        for (var c1 = 1; c1 <= cols; c1++) {
+            if(board[r1][c1] !== 0 && board[r1][c1] !== -1) {
+                for (var r2 = 1; r2 <= rows; r2++) {
+                    for (var c2 = 1; c2 <= cols; c2++) {
+                        if(r1===r2 && c1===c2) continue;
+                        if(board[r2][c2] !==0 && board[r2][c2] === board[r1][c1]){
+                            if(canConnect(r1,c1,r2,c2) !== null){
+                                var tile1 = document.querySelector(`[data-r="${r1}"][data-c="${c1}"]`);
+                                var tile2 = document.querySelector(`[data-r="${r2}"][data-c="${c2}"]`);
+                                tile1.classList.add('selected');
+                                tile2.classList.add('selected');
+                                setTimeout(function (){
+                                    tile1.classList.remove('selected');
+                                    tile2.classList.remove('selected');
+                                }, 1500);
+                                hint--;
+                                document.getElementById('hint-btn').innerText = `💡(${hint})`
+                                return;
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 }
