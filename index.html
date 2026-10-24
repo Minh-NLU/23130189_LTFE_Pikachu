@@ -19,7 +19,7 @@
 </div>
 <div id="level-menu" class="screen">
   <div class="menu-box">
-    <button class="back" onclick="">
+    <button class="back" onclick="switchScreen('main-menu')">
       ←
     </button>
     <h1>Chọn màn</h1>
@@ -89,7 +89,14 @@
     </button>
     <h2 id="result-title">Chiến thắng</h2>
     <div id="result-message"></div>
-    <button class="result-btn" onclick="nextLevelResult()">Chơi tếp</button>
+    <button class="result-btn" onclick="nextLevelResult()">Chơi tiếp</button>
+  </div>
+</div>
+<div class="popup-overlay" id="level-intro">
+  <div class="popup-content">
+    <h2 id="level-intro-title">Màn 1</h2>
+    <div id="level-intro-message"></div>
+    <button class="confirm-button" onclick="confirmLevel()">Bắt đầu chơi</button>
   </div>
 </div>
 <script src="script.js"></script>

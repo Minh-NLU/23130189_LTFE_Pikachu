@@ -4,6 +4,33 @@ var cols = 16;
 var MATRIX_rows = rows + 2;
 var MATRIX_cols = cols + 2;
 
+var levelsIntro = {
+    1:{
+        title:"Màn 1: Cổ điển",
+        message:"Màn chơi cơ bản. Ăn ô nào thì ô đó mất, bàn cờ đứng yên"
+    },
+    2:{
+        title:"Màn 2: Dồn ô xuống đáy",
+        message: "Sau khi ăn thành công thì toàn bộ các ô phía trên sẽ dồn xuống dưới để điền vào khoảng trống"
+    },
+    3:{
+        title:"Màn 3: Dồn ô về bên trái",
+        message: "Sau khi ăn thành công một cặp thì toàn bộ các ô sẽ trượt về bên trái"
+    },
+    4:{
+        title:"Màn 4: Xáo bài định kỳ",
+        message: "Cứ sau mỗi 3 hình ăn thành công, toàn bộ bàn cờ sẽ tự động đổi vị trí"
+    },
+    5:{
+        title:"Màn 5: Thử thách ghi nhớ",
+        message:"Toàn bộ bài sẽ ngửa trong 3 giây đầu sau đó sẽ tự động lật lại. Chọn sai thì các ô sẽ tự úp xuống"
+    },
+    6:{
+        title:"Màn 6: Chướng ngại vật",
+        message:"Bàn cờ sẽ xuất hiện những ô bị khóa không thể chọn và sẽ chặn các đường nối của các ô khác"
+    }
+}
+
 var pokemon = [];
 for (var i = 1; i <= 24; i++) {
     pokemon[i] = `images/pieces${i}.png`;
@@ -43,6 +70,14 @@ function togglePopup(show) {
 function selectLevel(level) {
     currentLevel = level;
     document.getElementById('level').innerText = currentLevel;
+    var intro = levelsIntro[level];
+    document.getElementById('level-intro-title').innerText = intro.title;
+    document.getElementById('level-intro-message').innerHTML = `<p>${intro.message}</p>`;
+    document.getElementById('level-intro').classList.add('active');
+}
+
+function confirmLevel() {
+    document.getElementById('level-intro').classList.remove('active');
     startGame();
 }
 
@@ -412,7 +447,7 @@ function shuffleBoard(){
     var index = 0;
     for(var r1 = 1; r1 <= rows; r1++) {
         for(var c1 = 1; c1 <= cols; c1++) {
-            if(board[r1][c1] !== 0) {
+            if(board[r1][c1] !== 0 && board[r1][c1] !== -1) {
                 board[r1][c1] = remainCards[index];
                 index++;
             }
@@ -496,5 +531,4 @@ function applyLevelSlide(){
             shuffleBoard();
         }
     }
-    else if(currentLevel === 6){}
 }

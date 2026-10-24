@@ -111,6 +111,21 @@ body{
     background: #e0aa00;
     transform: scale(1.1);
 }
+.confirm-button{
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #f5b400;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    transition: 0.2s;
+}
+.confirm-button:hover{
+    background: #e0aa00;
+    transform: scale(1.1);
+}
 .level-menu{
     margin-bottom: 20px;
 }
