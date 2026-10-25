@@ -96,8 +96,10 @@ function startGame() {
     checkHandleNoMoves();
     if(currentLevel === 5) {
         isMemory = true;
+        isProcessing = true;
         renderBoard();
         setTimeout(function () {
+            isProcessing = false;
             isMemory = false;
             renderBoard();
         },3000);
