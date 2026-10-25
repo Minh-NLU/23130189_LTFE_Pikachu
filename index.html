@@ -39,11 +39,13 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         text-align: center;
       }
-      .menu-box h1{
-        font-size: 50px;
-        font-weight: bold;
-        color: #f5b400;
-        margin: 10px;
+      .menu-box .logo-container{
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .logo{
+        max-width: 100%;
+        height: auto;
       }
       .menu-box button{
         width: 100%;
@@ -141,7 +143,7 @@
         background: linear-gradient(to top, #ff8c00, #ffcc00, #fffa75);
       }
       .header{
-        width: 600px;
+        width: 800px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -189,8 +191,8 @@
         user-select: none;
       }
       .tile{
-        width: 35px;
-        height: 40px;
+        width: 100%;
+        height: 100%;
         background: #f5b400;
         border-radius: 6px;
         display: flex;
@@ -286,7 +288,9 @@
 <body>
 <div id="main-menu" class="screen active">
   <div class="menu-box">
-    <h1>PIKACHU</h1>
+    <div class="logo-container">
+      <img src="images/logo.png" alt="Pikachu logo" class="logo">
+    </div>
     <button onclick="switchScreen('level-menu')">
       Bắt đầu chơi
     </button>
